@@ -1,166 +1,199 @@
 <script setup lang="ts">
-import { ref, onMounted, type Ref } from 'vue'
+import { ref, onMounted, type Ref, watch } from 'vue'
 import { fetchCustomers } from '@/services/CustomerService'
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api'
+import type { FiltrosMovimiento, Movimiento } from '@/models/movimiento'
 
-const customers: Ref<any, any> = ref()
-const filters: Ref<any, any> = ref()
-const representatives: Ref<any, any> = ref([
-  { name: 'Amy Elsner', image: 'amyelsner.png' },
-  { name: 'Anna Fali', image: 'annafali.png' },
-  { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-  { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-  { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-  { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-  { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-  { name: 'Onyama Limba', image: 'onyamalimba.png' },
-  { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-  { name: 'XuXue Feng', image: 'xuxuefeng.png' },
-])
+import Panel from 'primevue/panel'
+import Column from 'primevue/column'
+import Divider from 'primevue/divider'
+import InputText from 'primevue/inputtext'
+import DataTable from 'primevue/datatable'
+import FloatLabel from 'primevue/floatlabel'
+import ToggleButton from 'primevue/togglebutton'
+
+const txtNumeroCliente: Ref<string, string> = ref<string>('')
+const tgbRecibo: Ref<boolean, boolean> = ref<boolean>(false)
+const loading: Ref<boolean, boolean> = ref<boolean>(true)
+const customers: Ref<Movimiento[], Movimiento[]> = ref([])
+let debounceTimeout: ReturnType<typeof setTimeout> | null = null
+
+// const filters   : Ref<FiltrosMovimiento, FiltrosMovimiento> = ref({
+//     numeroCliente: { value: '', matchMode: FilterMatchMode.IN },
+//     recibo: {
+//         operator: FilterOperator.AND,
+//         constraints: [{ value: false, matchMode: FilterMatchMode.EQUALS }],
+//     },
+// })
+
 const statuses: Ref<string[], string[]> = ref([
-  'unqualified',
-  'qualified',
-  'new',
-  'negotiation',
-  'renewal',
-  'proposal',
+    'unqualified',
+    'qualified',
+    'new',
+    'negotiation',
+    'renewal',
+    'proposal',
 ])
-const loading: Ref<boolean, boolean> = ref(true)
+
+const debouncedFetchCustomers = () => {
+    if (debounceTimeout) clearTimeout(debounceTimeout)
+    debounceTimeout = setTimeout(() => {
+        fetchCustomers(txtNumeroCliente.value, tgbRecibo.value).then((data: Movimiento[]) => {
+            customers.value = data
+            loading.value = false
+        })
+    }, 1000)
+}
+
+watch([txtNumeroCliente, tgbRecibo], debouncedFetchCustomers)
 
 onMounted((): void => {
-  fetchCustomers().then((data: any) => {
-    customers.value = getCustomers(data)
     loading.value = false
-  })
+    // fetchCustomers().then((data: any) => {
+    //     customers.value = getCustomers(data)
+    //     loading.value = false
+    // })
 })
 
-const initFilters: () => void = () => {
-  filters.value = {
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-    },
-    'country.name': {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-    },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
-    date: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-    },
-    balance: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-    },
-    status: {
-      operator: FilterOperator.OR,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-    },
-    activity: { value: [0, 100], matchMode: FilterMatchMode.BETWEEN },
-    verified: { value: null, matchMode: FilterMatchMode.EQUALS },
-  }
-}
+// const initFilters: () => void = () => {
+//     filters.value = {
+//         // numeroCliente: { value: null, matchMode: FilterMatchMode.CONTAINS },
+//         numeroCliente: { value: null, matchMode: FilterMatchMode.IN },
+//         recibo: {
+//             operator: FilterOperator.AND,
+//             constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+//         },
+//     }
+// }
 
-initFilters()
+// initFilters()
 
 const formatDate: (value: any) => any = (value: any) => {
-  return value.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
+    return value.toLocaleDateString('en-MX', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    })
 }
 const formatCurrency: (value: any) => any = (value: any) => {
-  return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+    return value.toLocaleString('en-MX', { style: 'currency', currency: 'MXN' })
 }
-const clearFilter: () => void = () => {
-  initFilters()
-}
-const getCustomers: (data: any) => any[] = (data: any) => {
-  return [...(data || [])].map((d: any) => {
-    d.date = new Date(d.date)
+// const clearFilter: () => void = () => {
+//     initFilters()
+// }
+// const getCustomers: (data: any) => any[] = (data: any) => {
+//     return [...(data || [])].map((d: any) => {
+//         d.date = new Date(d.date)
 
-    return d
-  })
-}
+//         return d
+//     })
+// }
 const getSeverity: (
-  status: string,
+    status: string,
 ) => 'danger' | 'success' | 'info' | 'warn' | 'secondary' | undefined = (status: string) => {
-  switch (status) {
-    case 'unqualified':
-      return 'danger'
+    switch (status) {
+        case 'unqualified':
+            return 'danger'
 
-    case 'qualified':
-      return 'success'
+        case 'qualified':
+            return 'success'
 
-    case 'new':
-      return 'info'
+        case 'new':
+            return 'info'
 
-    case 'negotiation':
-      return 'warn'
+        case 'negotiation':
+            return 'warn'
 
-    case 'renewal':
-      return 'secondary'
-    default:
-      return undefined
-  }
+        case 'renewal':
+            return 'secondary'
+        default:
+            return undefined
+    }
 }
 </script>
 
 <template>
-  <main>
-    <DataTable
-      :value="customers"
-      paginator
-      showGridlines
-      :rows="10"
-      dataKey="id"
-      :loading="loading"
-    >
-      <template #header>
-        <div class="flex justify-between">
-          <span class="text-lg font-bold">Listado de Movimientos</span>
-        </div>
-      </template>
-      <template #empty> No hay movimientos encontrados. </template>
-      <template #loading> Cargando datos... </template>
-      <Column field="numeroCliente" header="Numero de Cliente" style="min-width: 10rem">
-        <template #body="{ data }">
-          {{ data.numeroCliente }}
-        </template>
-      </Column>
-      <Column field="nombre" header="Nombre" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ data.nombre }}
-        </template>
-      </Column>
-      <Column field="movimiento" header="Movimiento" style="min-width: 10rem">
-        <template #body="{ data }">
-          {{ data.movimiento }}
-        </template>
-      </Column>
-      <Column field="consecutivo" header="Consecutivo" style="min-width: 8rem">
-        <template #body="{ data }">
-          {{ data.consecutivo }}
-        </template>
-      </Column>
-      <Column field="importe" header="Importe" style="min-width: 10rem">
-        <template #body="{ data }">
-          {{ formatCurrency(data.importe) }}
-        </template>
-      </Column>
-      <Column field="fechaEmision" header="Fecha Emisión" style="min-width: 10rem">
-        <template #body="{ data }">
-          {{ formatDate(data.fechaEmision) }}
-        </template>
-      </Column>
-      <Column field="recibo" header="Recibo" style="min-width: 8rem">
-        <template #body="{ data }">
-          {{ data.recibo }}
-        </template>
-      </Column>
-    </DataTable>
-  </main>
+    <main class="flex flex-col w-full items-center gap-4">
+        <Panel header="Filtro">
+            <div class="m-0 flex flex-col md:flex-row gap-2">
+                <div>
+                    <FloatLabel variant="on">
+                        <InputText
+                            id="numeroCliente"
+                            v-model="txtNumeroCliente"
+                            autocomplete="off"
+                        />
+                        <label for="numeroCliente">Numero de Cliente</label>
+                    </FloatLabel>
+                </div>
+                <div>
+                    <ToggleButton
+                        id="recibo"
+                        v-model="tgbRecibo"
+                        class="w-40"
+                        onLabel="Con Recibo"
+                        offLabel="Sin Recibo"
+                    />
+                </div>
+            </div>
+        </Panel>
+        <Divider type="solid" />
+        <DataTable
+            class="w-full md:w-11/12 lg:w-10/12 xl:w-10/12"
+            :value="customers"
+            paginator
+            showGridlines
+            :rows="10"
+            dataKey="id"
+            :loading="loading"
+        >
+            <template #header>
+                <div class="flex justify-between">
+                    <span class="text-lg font-bold"> Listado de Movimientos </span>
+                </div>
+            </template>
+            <template #empty> No hay movimientos encontrados. </template>
+            <template #loading> Cargando datos... </template>
+            <Column field="numeroCliente" header="Numero de Cliente" style="min-width: 10rem">
+                <template #body="{ data }">
+                    {{ data.numeroCliente }}
+                </template>
+            </Column>
+            <Column field="nombre" header="Nombre" style="min-width: 12rem">
+                <template #body="{ data }">
+                    {{ data.nombre }}
+                </template>
+            </Column>
+            <Column field="movimiento" header="Movimiento" style="min-width: 10rem">
+                <template #body="{ data }">
+                    {{ data.movimiento }}
+                </template>
+            </Column>
+            <Column field="consecutivo" header="Consecutivo" style="min-width: 8rem">
+                <template #body="{ data }">
+                    {{ data.consecutivo }}
+                </template>
+            </Column>
+            <Column field="importe" header="Importe" style="min-width: 10rem">
+                <template #body="{ data }">
+                    {{ formatCurrency(data.importeTotal) }}
+                </template>
+            </Column>
+            <Column field="sucursal" header="Sucursal" style="min-width: 10rem">
+                <template #body="{ data }">
+                    {{ data.sucursal }}
+                </template>
+            </Column>
+            <Column field="fechaEmision" header="Fecha Emisión" style="min-width: 10rem">
+                <template #body="{ data }">
+                    {{ formatDate(data.fechaEmision) }}
+                </template>
+            </Column>
+            <Column field="recibo" header="Recibo" style="min-width: 8rem">
+                <template #body="{ data }">
+                    {{ data.recibo }}
+                </template>
+            </Column>
+        </DataTable>
+    </main>
 </template>
