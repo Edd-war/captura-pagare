@@ -1,61 +1,183 @@
-# vue-project
+# Sistema de Captura de Pagaré
 
-This template should help get you started developing with Vue 3 in Vite.
+Sistema web moderno desarrollado en Vue.js 3 para la gestión y consulta de movimientos de pagarés. Proporciona una interfaz intuitiva y responsiva para la administración de datos financieros con funcionalidades de filtrado avanzado y visualización de datos.
 
-## Recommended IDE Setup
+## 🚀 Demo en Vivo
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+**🌐 Aplicación Desplegada:** [http://app-front-captura-pagare.s3-website-us-east-1.amazonaws.com/](http://app-front-captura-pagare.s3-website-us-east-1.amazonaws.com/)
 
-## Type Support for `.vue` Imports in TS
+## 📋 Acceso Rápido a Documentación
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+| Documento                     | Descripción                                                                                             | Enlace                                                                                                |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 📋 **Documentación Técnica**  | Especificaciones técnicas completas, arquitectura del sistema, tecnologías utilizadas y configuraciones | **[Ver Documentación](https://github.com/Edd-war/captura-pagare/blob/main/DOCUMENTACION_TECNICA.md)** |
+| 📊 **Reporte de Actividades** | Cronograma de desarrollo, actividades realizadas, resultados alcanzados y deployment                    | **[Ver Reporte](https://github.com/Edd-war/captura-pagare/blob/main/REPORTE_ACTIVIDADES.md)**         |
 
-## Customize configuration
+## ✨ Características
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- 🔍 **Sistema de Filtros Avanzados** - Búsqueda por número de cliente y estado de recibo
+- 📊 **Visualización de Datos** - Tabla responsiva con paginación automática
+- 🌙 **Modo Oscuro/Claro** - Toggle para cambiar tema de la aplicación
+- 📱 **Diseño Responsivo** - Compatible con dispositivos móviles y desktop
+- ⚡ **Performance Optimizada** - Debounce en búsquedas y lazy loading
+- 🔧 **TypeScript** - Tipado estricto para mayor confiabilidad
 
-## Project Setup
+## 🛠️ Stack Tecnológico
 
-```sh
+- **Frontend:** Vue.js 3.5.18 con Composition API
+- **Lenguaje:** TypeScript 5.8.0
+- **UI Framework:** PrimeVue 4.3.7 + Tailwind CSS 4.1.12
+- **Build Tool:** Vite 7.0.6
+- **Estado:** Pinia 3.0.3
+- **Routing:** Vue Router 4.5.1
+- **Testing:** Vitest + Cypress
+- **Deployment:** AWS S3 Static Website Hosting
+
+## 📋 Requisitos del Sistema
+
+- **Node.js:** ^20.19.0 || >=22.12.0
+- **Package Manager:** npm/yarn/pnpm
+
+## 🔧 IDE Recomendado
+
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (desactivar Vetur)
+
+## ⚙️ Configuración TypeScript
+
+Para soporte completo de TypeScript con archivos `.vue`, utilizamos `vue-tsc` en lugar de `tsc`. Asegúrate de tener [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) instalado en tu editor.
+
+## 🚀 Instalación y Configuración
+
+### Clonar el repositorio
+
+```bash
+git clone https://github.com/Edd-war/captura-pagare.git
+cd captura-pagare
+```
+
+### Instalar dependencias
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Servidor de desarrollo
 
-```sh
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Build de producción
 
-```sh
+```bash
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Preview del build
 
-```sh
+```bash
+npm run preview
+```
+
+## 🧪 Testing
+
+### Pruebas unitarias con [Vitest](https://vitest.dev/)
+
+```bash
 npm run test:unit
 ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+### Pruebas E2E con [Cypress](https://www.cypress.io/)
 
-```sh
+Para desarrollo (más rápido):
+
+```bash
 npm run test:e2e:dev
 ```
 
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
+Para producción (recomendado antes del deploy):
 
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
+```bash
 npm run build
 npm run test:e2e
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## 🔍 Linting y Formateo
 
-```sh
+### Linting con [ESLint](https://eslint.org/)
+
+```bash
 npm run lint
 ```
+
+### Formateo con Prettier
+
+```bash
+npm run format
+```
+
+## 📁 Estructura del Proyecto
+
+```
+captura-pagare/
+├── src/
+│   ├── App.vue                 # Componente principal
+│   ├── main.ts                 # Punto de entrada
+│   ├── components/             # Componentes reutilizables
+│   ├── models/
+│   │   └── movimiento.ts       # Interfaces TypeScript
+│   ├── router/
+│   │   └── index.ts           # Configuración de rutas
+│   ├── services/
+│   │   └── CustomerService.ts  # Servicios de API
+│   ├── stores/
+│   │   └── counter.ts         # Stores de Pinia
+│   └── views/
+│       └── FiltroView.vue     # Vista principal
+├── cypress/                   # Pruebas E2E
+├── public/                    # Assets estáticos
+└── dist/                      # Build de producción
+```
+
+## 🌐 Deployment
+
+La aplicación está desplegada en AWS S3 con hosting de sitio web estático:
+
+- **URL:** http://app-front-captura-pagare.s3-website-us-east-1.amazonaws.com/
+- **Región:** us-east-1
+- **CDN Ready:** Compatible con CloudFront
+- **Auto-scaling:** Nativo de AWS S3
+
+## 📖 Documentación
+
+Para documentación técnica detallada, consulta:
+
+- 📋 **[Documentación Técnica](https://github.com/Edd-war/captura-pagare/blob/main/DOCUMENTACION_TECNICA.md)** - Especificaciones técnicas completas, arquitectura y configuraciones
+- 📊 **[Reporte de Actividades](https://github.com/Edd-war/captura-pagare/blob/main/REPORTE_ACTIVIDADES.md)** - Cronograma de desarrollo, actividades realizadas y resultados
+
+### 📑 Documentos Locales
+
+Si estás en el repositorio local, también puedes acceder a:
+
+- [Documentación Técnica Local](./DOCUMENTACION_TECNICA.md)
+- [Reporte de Actividades Local](./REPORTE_ACTIVIDADES.md)
+
+## 🤝 Contribución
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📝 Licencia
+
+Este proyecto es privado y pertenece a Eduardo Arroyo.
+
+## 👨‍💻 Autor
+
+**Eduardo Arroyo** - [Edd-war](https://github.com/Edd-war)
+
+---
+
+⭐ ¡Dale una estrella al proyecto si te ha sido útil!
