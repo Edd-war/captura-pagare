@@ -155,13 +155,6 @@ Para documentación técnica detallada, consulta:
 - 📋 **[Documentación Técnica](https://github.com/Edd-war/captura-pagare/blob/main/DOCUMENTACION_TECNICA.md)** - Especificaciones técnicas completas, arquitectura y configuraciones
 - 📊 **[Reporte de Actividades](https://github.com/Edd-war/captura-pagare/blob/main/REPORTE_ACTIVIDADES.md)** - Cronograma de desarrollo, actividades realizadas y resultados
 
-### 📑 Documentos Locales
-
-Si estás en el repositorio local, también puedes acceder a:
-
-- [Documentación Técnica Local](./DOCUMENTACION_TECNICA.md)
-- [Reporte de Actividades Local](./REPORTE_ACTIVIDADES.md)
-
 ## 🤝 Contribución
 
 1. Fork el proyecto
@@ -172,7 +165,7 @@ Si estás en el repositorio local, también puedes acceder a:
 
 ## 📝 Licencia
 
-Este proyecto es privado y pertenece a Eduardo Arroyo.
+Este proyecto es privado y pertenece a MAVI de Occidente S.A. de C.V.
 
 ## 👨‍💻 Autor
 

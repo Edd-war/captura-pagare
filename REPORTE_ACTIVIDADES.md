@@ -271,5 +271,6 @@ El proyecto representa una solución moderna y escalable que puede servir como b
 ---
 
 **Firma Digital:** Eduardo Arroyo  
+**Derechos Reservados © 2025:** MAVI de Occidente S.A. de C.V.  
 **Fecha:** Septiembre 2025  
 **Estado del Proyecto:** ✅ COMPLETADO Y DESPLEGADO
